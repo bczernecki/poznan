@@ -52,11 +52,17 @@ saveRDS(warszawa, file="data/warszawa.rds")
 b <- left_join(a, warszawa) # laczenie serii
 head(b)
 
-saveRDS(b, file="data/calosc.rds")
-
+#saveRDS(b, file="data/calosc.rds")
+b <- readRDS(file="data/calosc.rds")
 
 # ploty kontrolne:
 roczne <- b %>% group_by(yy) %>% summarise(poz=mean(poznan), poczdam=mean(poczdam), warszawa=mean(warszawa))
 head(roczne)
 plot(roczne$yy, roczne$poz-roczne$warszawa, type='l')
 plot(roczne$yy, roczne$poczdam-roczne$warszawa, type='l')
+
+library(ggplot2)
+ggplot(roczne, aes(yy,poz))+geom_line(col="gray")+geom_smooth(colour="pink", fill="red") + 
+  geom_smooth(aes(yy,warszawa))+
+  geom_smooth(aes(yy,poczdam),col="yellow", fill='yellow3')+
+  ggtitle("Porównanie serii: Warszawa-Poznań-Poczdam")
