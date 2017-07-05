@@ -134,8 +134,17 @@ calosc <- left_join(calosc, szczecin)
 calosc <- select(calosc, yy:wroclaw,krakow:szczecin,noaa_poczdam:noaa_warszawa)
 #saveRDS(calosc, "data/calosc.rds")
 
-
-
+# dolaczenie sniezki z : https://crudata.uea.ac.uk/cru/data/temperature/
+sniezka <- read.table("data/xls/sniezka.txt", na.strings="-99.0")
+sniezka <- sniezka[,1:13]
+head(sniezka)
+colnames(sniezka) <- c("yy", 1:12)
+sniezka <- gather(sniezka, key="mm", value="sniezka", 2:13)
+head(sniezka)
+sniezka$mm <- as.numeric(as.character(sniezka$mm))
+calosc <- left_join(calosc, sniezka)
+calosc <- select(calosc, yy:wroclaw,krakow:sniezka,noaa_poczdam:noaa_warszawa)
+#saveRDS(calosc, "data/calosc.rds")
 
 calosc <- readRDS("data/calosc.rds")
 ########################
@@ -145,7 +154,7 @@ calosc <- readRDS("data/calosc.rds")
 ########################
 
 roczne <-calosc %>% group_by(yy) %>% summarise(poznan=mean(poznan), poczdam=mean(poczdam), warszawa=mean(warszawa), praga=mean(praga), wroclaw=mean(wroclaw),
-                                               krakow=mean(krakow), szczecin=mean(szczecin),
+                                               krakow=mean(krakow), szczecin=mean(szczecin),sniezka=mean(sniezka),
                                                noaa_poznan=mean(noaa_poznan), noaa_poczdam=mean(noaa_poczdam), noaa_warszawa=mean(noaa_warszawa)
                                                )
  head(roczne)
@@ -164,12 +173,17 @@ ma <- function(arr, n=15){
 # srednia ruchoma 5-letnia
 roczne3 <- apply(roczne,2,function(x) ma(x, 5))
 srednia_ruchoma <- as.data.frame(roczne3)
-srednia_ruchoma <- srednia_ruchoma[,c(1:8)]
+srednia_ruchoma <- srednia_ruchoma[,c(1:9)]
 
 head(srednia_ruchoma)
-srednia_ruchoma <- gather(as.data.frame(srednia_ruchoma), key = "stacja",value = "t2m",poznan:szczecin)
+srednia_ruchoma <- gather(as.data.frame(srednia_ruchoma), key = "stacja",value = "t2m",poznan:sniezka)
 # tylko na cele korekty jesli chcemy cos dodac/odjac:
 # srednia_ruchoma[which(srednia_ruchoma$stacja=="poznan" & srednia_ruchoma$yy<1920),3] <-  srednia_ruchoma[which(srednia_ruchoma$stacja=="poznan" & srednia_ruchoma$yy<1920),3]
+
+#podciagamy sniezke, zeby nie liczyc na razie anomalii dla kazdej stacji:
+srednia_ruchoma[which(srednia_ruchoma$stacja=="sniezka"),3] <-  srednia_ruchoma[which(srednia_ruchoma$stacja=="sniezka"),3]+7.5
+#
+
 srednia_ruchoma <- dplyr::filter(srednia_ruchoma, yy>1852, yy<2000)
 head(srednia_ruchoma)
 srednia_ruchoma <- filter(srednia_ruchoma, stacja!="szczecin")
