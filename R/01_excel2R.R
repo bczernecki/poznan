@@ -95,7 +95,7 @@ praga <- praga %>% group_by(yy,mm) %>% summarise(praga=round(mean(tavg, na.rm=T)
 # laczenie ponowne wszystkich serii danych:
 calosc <- left_join(calosc, praga)
 #saveRDS(calosc, file="data/calosc.rds")
-calosc <- readRDS(file="data/calosc.rds")
+#calosc <- readRDS(file="data/calosc.rds")
 
 
 ## dodanie wroclawia brysiów:
@@ -109,7 +109,7 @@ colnames(wroclaw)[1] <- c("yy")
 calosc <- left_join(calosc, wroclaw)
 calosc <- select(calosc, yy:warszawa,praga,wroclaw,noaa_poczdam:noaa_warszawa)
 #saveRDS(calosc, "data/calosc.rds")
-calosc <- readRDS("data/calosc.rds")
+#calosc <- readRDS("data/calosc.rds")
 
 
 ## dodanie serii z crutempa:
@@ -121,7 +121,7 @@ krakow <- gather(krakow, key="mm", value="krakow", 2:13)
 krakow$mm <- as.numeric(as.character(krakow$mm))
 calosc <- left_join(calosc, krakow)
 #saveRDS(calosc, "data/calosc.rds")
-calosc <- readRDS("data/calosc.rds")
+#calosc <- readRDS("data/calosc.rds")
 
 # dodanie serii ze szczecina:
 szczecin <- read.table("data/xls/szczecin.txt", header=F, na.strings = -999)
@@ -135,16 +135,18 @@ calosc <- select(calosc, yy:wroclaw,krakow:szczecin,noaa_poczdam:noaa_warszawa)
 #saveRDS(calosc, "data/calosc.rds")
 
 # dolaczenie sniezki z : https://crudata.uea.ac.uk/cru/data/temperature/
-sniezka <- read.table("data/xls/sniezka.txt", na.strings="-99.0")
+# sniezka <- read.table("data/xls/sniezka.txt", na.strings="-99.0")
+## zmiana: 07/07/2017: sniezka przepisana przez Hanie z artykulu Glowickiego:
+sniezka <- readxl::read_excel("data/xls/sniezka_glowicki.xls")
 sniezka <- sniezka[,1:13]
 head(sniezka)
 colnames(sniezka) <- c("yy", 1:12)
 sniezka <- gather(sniezka, key="mm", value="sniezka", 2:13)
-head(sniezka)
 sniezka$mm <- as.numeric(as.character(sniezka$mm))
+
 calosc <- left_join(calosc, sniezka)
 calosc <- select(calosc, yy:wroclaw,krakow:sniezka,noaa_poczdam:noaa_warszawa)
-#saveRDS(calosc, "data/calosc.rds")
+saveRDS(calosc, "data/calosc.rds")
 
 calosc <- readRDS("data/calosc.rds")
 ########################
@@ -210,6 +212,6 @@ calosc %>% group_by(mm) %>% summarise( mean(poznan, na.rm=T)-mean(warszawa, na.r
 
 
 # plot kontrolny do szukania bugow w krakowie:
-plot(roczne$yy, roczne$praga-roczne$krakow, type='l', main="tzw. homogeniczna :)")
+plot(roczne$yy, roczne$praga-roczne$krakow, type='l', main="tzw. homogeniczna :)", xlim=c(1950,2010))
 cbind(roczne$yy,roczne$praga-roczne$krakow)
 #lines(roczne$yy, roczne$poczdam, type='l',col='red')
