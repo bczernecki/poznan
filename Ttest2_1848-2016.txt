@@ -1,7 +1,7 @@
 
 HOMOGEN() APPLICATION OUTPUT  (From R's contributed package 'climatol' 3.0)
 
-=========== Homogenization of Ttest2, 1848-2016. (Mon Jul 10 14:07:06 2017)
+=========== Homogenization of Ttest2, 1848-2016. (Mon Jul 10 16:16:02 2017)
 
 Parameters: varcli=Ttest2 anyi=1848 anyf=2016 suf=NA nm=NA nref=10,10,4 std=3 swa=NA ndec=1 dz.max=6 dz.min=-6 wd=0,100,500 snht1=30 snht2=30 tol=0.02 mxdif=0.05 force=FALSE wz=0.001 trf=0 mndat=NA gp=3 ini=NA na.strings=NA maxite=50 vmin=NA vmax=NA nclust=100 clustmethod=ward.D2 grdcol=#808080 mapcol=#A6A6A6 hires=FALSE expl=FALSE metad=FALSE sufbrk=m verb=TRUE
 
@@ -13,8 +13,8 @@ Computing inter-station distances:  1  2  3  4  5  6  7
 Computation of missing data with outlier removal
 (Suggested data replacements are provisional)
 Station(rank) Date: Observed -> Suggested (Standard dev.)
-krakow(6) 1947-01-01: -0.8 -> -7.4 (7.76)
-szczecin(7) 1991-02-01: 2.4 -> -2.7 (7.48)
+krakow(6) 1947-01-01: -0.8 -> -7.4 (7.66)
+szczecin(7) 1991-02-01: 2.4 -> -2.7 (7.12)
 
 Performing shift analysis on the 8 stations...
 
@@ -26,23 +26,24 @@ Computing inter-station weights... (done)
 Computation of missing data with outlier removal
 (Suggested data replacements are provisional)
 Station(rank) Date: Observed -> Suggested (Standard dev.)
-praga(4) 1914-02-01: 0.31 -> 6.2 (-6.05)
-krakow(6) 1864-12-01: -0.8 -> -5.8 (6.51)
+poznan(1) 1940-02-01: -10.89 -> -7.5 (-6.53)
+praga(4) 1914-02-01: 0.31 -> 6.5 (-6.25)
+krakow(6) 1864-12-01: -0.8 -> -5.9 (6.63)
 
 Performing shift analysis on the 8 stations...
 
-poznan(1) breaks at 1923-02-01 (303.4)
+szczecin(7) breaks at 1866-03-01 (170.5)
 
 Update number of series:  8 + 1 = 9 
 
 Computation of missing data with outlier removal
 (Suggested data replacements are provisional)
 Station(rank) Date: Observed -> Suggested (Standard dev.)
-poznan-2(9) 1940-02-01: -10.89 -> -7.5 (-6.2)
+(No detected outliers)
 
 Performing shift analysis on the 9 stations...
 
-praga(4) breaks at 1964-02-01 (137.9)
+praga(4) breaks at 1964-02-01 (116.9)
 
 Update number of series:  9 + 1 = 10 
 
@@ -53,7 +54,7 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 
 Performing shift analysis on the 10 stations...
 
-szczecin(7) breaks at 1862-03-01 (109.4)
+warszawa(3) breaks at 1961-11-01 (42.2)
 
 Update number of series:  10 + 1 = 11 
 
@@ -64,30 +65,40 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 
 Performing shift analysis on the 11 stations...
 
-poznan(1) breaks at 1869-01-01 (157.7)
+wroclaw(5) breaks at 1887-02-01 (35.9)
 
 Update number of series:  11 + 1 = 12 
 
 Computation of missing data with outlier removal
 (Suggested data replacements are provisional)
 Station(rank) Date: Observed -> Suggested (Standard dev.)
-(No detected outliers)
+krakow(6) 1852-08-01: 14.8 -> 19.7 (-6.13)
 
 Performing shift analysis on the 12 stations...
 
-warszawa(3) breaks at 1961-11-01 (53.8)
-wroclaw(5) breaks at 1887-02-01 (49.8)
+krakow(6) breaks at 1887-03-01 (146.5)
 
-Update number of series:  12 + 2 = 14 
+Update number of series:  12 + 1 = 13 
 
 Computation of missing data with outlier removal
 (Suggested data replacements are provisional)
 Station(rank) Date: Observed -> Suggested (Standard dev.)
-krakow(6) 1852-08-01: 14.8 -> 19.7 (-6.14)
+(No detected outliers)
+
+Performing shift analysis on the 13 stations...
+
+warszawa(3) breaks at 1886-11-01 (331.1)
+
+Update number of series:  13 + 1 = 14 
+
+Computation of missing data with outlier removal
+(Suggested data replacements are provisional)
+Station(rank) Date: Observed -> Suggested (Standard dev.)
+(No detected outliers)
 
 Performing shift analysis on the 14 stations...
 
-krakow(6) breaks at 1887-03-01 (145.2)
+praga(4) breaks at 1882-11-01 (162.6)
 
 Update number of series:  14 + 1 = 15 
 
@@ -98,7 +109,7 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 
 Performing shift analysis on the 15 stations...
 
-warszawa(3) breaks at 1886-11-01 (307.1)
+wroclaw-2(12) breaks at 1946-07-01 (86.1)
 
 Update number of series:  15 + 1 = 16 
 
@@ -109,7 +120,7 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 
 Performing shift analysis on the 16 stations...
 
-praga(4) breaks at 1882-10-01 (143.0)
+szczecin-2(9) breaks at 1951-11-01 (67.3)
 
 Update number of series:  16 + 1 = 17 
 
@@ -120,7 +131,7 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 
 Performing shift analysis on the 17 stations...
 
-poznan-3(12) breaks at 1883-01-01 (141.7)
+wroclaw(5) breaks at 1881-03-01 (55.7)
 
 Update number of series:  17 + 1 = 18 
 
@@ -131,20 +142,10 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 
 Performing shift analysis on the 18 stations...
 
-szczecin-2(11) breaks at 1951-11-01 (97.1)
+krakow(6) breaks at 1881-03-01 (79.1)
+warszawa(3) breaks at 1881-04-01 (72.5)
 
-Update number of series:  18 + 1 = 19 
-
-Computation of missing data with outlier removal
-(Suggested data replacements are provisional)
-Station(rank) Date: Observed -> Suggested (Standard dev.)
-(No detected outliers)
-
-Performing shift analysis on the 19 stations...
-
-wroclaw-2(14) breaks at 1946-07-01 (78.1)
-
-Update number of series:  19 + 1 = 20 
+Update number of series:  18 + 2 = 20 
 
 Computation of missing data with outlier removal
 (Suggested data replacements are provisional)
@@ -153,7 +154,7 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 
 Performing shift analysis on the 20 stations...
 
-wroclaw(5) breaks at 1882-03-01 (61.1)
+praga(4) breaks at 1880-12-01 (31.8)
 
 Update number of series:  20 + 1 = 21 
 
@@ -163,18 +164,6 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 (No detected outliers)
 
 Performing shift analysis on the 21 stations...
-
-warszawa(3) breaks at 1882-03-01 (59.3)
-krakow(6) breaks at 1882-03-01 (54.6)
-
-Update number of series:  21 + 2 = 23 
-
-Computation of missing data with outlier removal
-(Suggested data replacements are provisional)
-Station(rank) Date: Observed -> Suggested (Standard dev.)
-(No detected outliers)
-
-Performing shift analysis on the 23 stations...
 
 
 ========== STAGE 3 (Final computation of all missing data) ==========
@@ -186,57 +175,54 @@ Computation of missing data with outlier removal
 
 The following lines will have one of these formats:
 Station(rank) Date: Observed -> Suggested (Standard dev.)
-Iteration Max.mean.difference (Station_code)2 0.062 (krakow)
-3 0.057 (krakow)
-4 0.053 (krakow)
-5 0.05 (krakow)
+Iteration Max.mean.difference (Station_code)2 0.054 (krakow)
+3 0.05 (krakow)
+4 0.047 (krakow)
 
 Last series readjustment (please, be patient...)
 
-======== End of the homogenization process, after 41.31 secs 
+======== End of the homogenization process, after 1.06 mins 
 
 ----------- Final computations:
 
 ACmx: Station maximum absolute autocorrelations of anomalies
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  0.180   0.210   0.280   0.267   0.300   0.380 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+  0.150   0.215   0.285   0.272   0.315   0.420       1 
 
 SNHT: Standard normal homogeneity test (on anomaly series)
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   3.80    5.85    8.40   10.90   12.95   27.30 
+   2.90    5.00    8.20   10.37   13.00   29.10 
 
 RMSE: Root mean squared error of the estimated data
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.4102  0.5823  0.6859  0.6992  0.7810  1.3281 
+ 0.4344  0.6233  0.7694  0.7315  0.7968  1.3320 
 
 POD: Percentage of original data
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   2.00   10.00   23.00   28.61   42.00   80.00 
+   1.00   10.00   30.00   29.29   43.00   80.00 
 
    ACmx SNHT RMSE POD Code       Name      
-1  0.19 23.6 0.47 12  poznan     poznan    
-2  0.30  8.4 0.62 72  poczdam    poczdam   
-3  0.19  3.8 0.77 20  warszawa   warszawa  
-4  0.21 11.8 0.78 20  praga      praga     
-5  0.21  5.3 0.41 20  wroclaw    wroclaw   
-6  0.28 27.3 0.75 20  krakow     krakow    
-7  0.28  4.0 0.61  8  szczecin   szczecin  
-8  0.38  5.9 1.33 80  sniezka    sniezka   
-9  0.20 10.1 0.61 54  poznan-2   poznan-2  
-10 0.36  5.7 0.80 30  praga-2    praga-2   
-11 0.29  5.8 0.63  4  szczecin-2 szczecin-2
-12 0.30 18.3 0.55  8  poznan-3   poznan-3  
-13 0.35  7.5 0.87 32  warszawa-2 warszawa-2
-14 0.30 14.1 0.54 35  wroclaw-2  wroclaw-2 
-15 0.29  6.1 0.82 43  krakow-2   krakow-2  
-16 0.22 18.7 0.86 44  warszawa-3 warszawa-3
-17 0.29  9.9 0.76 48  praga-3    praga-3   
-18 0.34  7.5 0.69 23  poznan-4   poznan-4  
-19 0.23  9.7 0.55 38  szczecin-3 szczecin-3
-20 0.18 27.2 0.65 41  wroclaw-3  wroclaw-3 
-21 0.18  8.5 0.46  2  wroclaw-4  wroclaw-4 
-22 0.23  3.9 0.78  2  warszawa-4 warszawa-4
-23 0.34  7.5 0.77  2  krakow-3   krakow-3  
+1  0.20 12.1 0.61 54  poznan     poznan    
+2  0.31 10.1 0.62 72  poczdam    poczdam   
+3  0.18  2.9 0.80 19  warszawa   warszawa  
+4  0.20 13.0 0.80 19  praga      praga     
+5  0.23  5.0 0.44 19  wroclaw    wroclaw   
+6  0.28 29.1 0.74 19  krakow     krakow    
+7  0.29  3.2 0.78 10  szczecin   szczecin  
+8  0.38  4.7 1.33 80  sniezka    sniezka   
+9  0.42  7.6 0.70  2  szczecin-2 szczecin-2
+10 0.36  5.8 0.80 30  praga-2    praga-2   
+11 0.35  7.5 0.87 32  warszawa-2 warszawa-2
+12 0.30 14.0 0.54 35  wroclaw-2  wroclaw-2 
+13 0.29  5.8 0.82 43  krakow-2   krakow-2  
+14 0.22 19.6 0.86 44  warszawa-3 warszawa-3
+15 0.29 15.1 0.77 48  praga-3    praga-3   
+16 0.18 24.7 0.65 41  wroclaw-3  wroclaw-3 
+17 0.24  9.6 0.55 38  szczecin-3 szczecin-3
+18 0.15 12.3 0.43  3  wroclaw-4  wroclaw-4 
+19 0.33  8.2 0.77  3  krakow-3   krakow-3  
+20 0.24  3.8 0.78  3  warszawa-4 warszawa-4
+21   NA  3.6 0.70  1  praga-4    praga-4   
 
 ----------- Generated output files: -------------------------
 

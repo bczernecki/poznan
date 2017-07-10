@@ -25,8 +25,8 @@ ma <- function(arr, n=15){
   res
 }
 
-# srednia ruchoma 5-letnia
-roczne3 <- apply(roczne,2,function(x) ma(x, 5))
+# srednia ruchoma 7-letnia
+roczne3 <- apply(roczne,2,function(x) ma(x, 7))
 srednia_ruchoma <- as.data.frame(roczne3)
 head(srednia_ruchoma)
 
@@ -40,7 +40,7 @@ srednia_ruchoma[which(srednia_ruchoma$stacja=="sniezka"),3] <-  srednia_ruchoma[
 
 srednia_ruchoma <- dplyr::filter(srednia_ruchoma, yy>1852, yy<2017)
 head(srednia_ruchoma)
-srednia_ruchoma <- filter(srednia_ruchoma, stacja!="szczecin", stacja!="poznan", stacja!="krakow")
+srednia_ruchoma <- filter(srednia_ruchoma, stacja!="szczecin")
 ggplot(srednia_ruchoma, aes(yy,t2m, group=stacja, colour=stacja))+geom_line()+ggtitle("Comparison")+
   geom_smooth(method = "lm", formula = y ~ splines::bs(x, 3), se = T)
 #+  scale_colour_manual(values=c("pink","skyblue","red"))
@@ -82,9 +82,9 @@ load("Ttest2_1848-2016.rda")
 
 # poznan zostal poszatkowany na 4 serie, zatem:
 a1 <- dah[,,1]
-a2 <- dah[,,11]
-a3 <- dah[,,14]
-a4 <- dah[,,19]
+a2 <- dah[,,9]
+a3 <- dah[,,12]
+a4 <- dah[,,18]
 
 b1 <- NULL
 b2 <- NULL
@@ -106,12 +106,48 @@ colnames(bb) <- c("v1","v2","v3","v4","oryg","yy","mm")
 head(bb)
 bb2 <- bb %>% group_by(yy) %>% summarise_all(mean)
 # wychodzi, ze V2 to nasza seria najbardziej optymalna
+head(bb2)
+
+roczne3 <- apply(bb2,2,function(x) ma(x, 7))
+bb2 <- as.data.frame(roczne3)
+head(srednia_ruchoma)
+
  
-plot(bb2$yy, bb2$v2-colMeans(bb2,na.rm=T)[6], type='l', lwd=2, xlim=c(1850,1950))
+plot(bb2$yy, bb2$v2-colMeans(bb2,na.rm=T)[6], type='l', lwd=2, ylim=c(-2,2), xlim=c(1850,2015), xaxs='i')
 lines(bb2$yy, bb2$v1-colMeans(bb2,na.rm=T)[6], type='l', col="red", lty=2)
 lines(bb2$yy, bb2$v3-colMeans(bb2,na.rm=T)[6], type='l', col="green", lty=2)
 lines(bb2$yy, bb2$v4-colMeans(bb2,na.rm=T)[6], type='l', col="purple", lty=2)
 lines(bb2$yy, bb2$oryg-colMeans(bb2,na.rm=T)[6], type='l', col="blue", lty=1)
+
+
+plot(bb2$yy, bb2$v2, type='l', lwd=2, xlim=c(1850,2015), xaxs='i')
+abline(v=seq(1850,2050,10), lty=3)
+## cos tu jednak mocno nie pasuje dla odbicia ~1885
+plot(bb2$yy, bb2$v2, type='l', lwd=2, xlim=c(1885,2015), xaxs='i')
+abline(v=seq(1850,2050,10), lty=3)
+
+
+### moze warto sprobowac uciac dane dla poznania sprzed okresu 'jumpa'
+### i reszte zrekonstruowac
+dane[which(dane$yy>1960),"krakow"] <- NA
+dane[which(dane$yy<1923),"poznan"] <- NA
+dat2 <- as.matrix(dane[,-1:-2]) # nasze
+write(dat2,'Ttest2_1848-2016.dat') # nasze
+# kolejnosc: poznan poczdam warszawa praga wroclaw krakow szczecin sniezka
+est.c2 <- data.frame(X=c(13.06,16.92,21.01,14.42,17.03,19.94,14.55,15.74),
+                     Y=c(52.406, 52.39, 52.23, 50.09, 51.11, 50.064, 53.42, 50.736),
+                     Z=c(86, 81, 106, 191, 120, 237, 1, 1602) ,
+                     Code=as.factor(c("poznan","poczdam", "warszawa", "praga", "wroclaw", "krakow", "szczecin", "sniezka")),
+                     Names=c("poznan","poczdam", "warszawa", "praga", "wroclaw", "krakow", "szczecin", "sniezka"))   
+write.table(est.c2,'Ttest2_1848-2016.est',row.names=FALSE,col.names=FALSE)
+homogen('Ttest2',1848,2016, hires=F, wd=c(0,100,500), dz.max=6, snht1=30)
+## End(Not run)
+load("Ttest2_1848-2016.rda")
+
+
+
+
+
 
 
 
