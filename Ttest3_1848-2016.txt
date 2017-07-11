@@ -1,7 +1,7 @@
 
 HOMOGEN() APPLICATION OUTPUT  (From R's contributed package 'climatol' 3.0)
 
-=========== Homogenization of Ttest3, 1848-2016. (Tue Jul 11 23:42:43 2017)
+=========== Homogenization of Ttest3, 1848-2016. (Wed Jul 12 00:33:34 2017)
 
 Parameters: varcli=Ttest3 anyi=1848 anyf=2016 suf=NA nm=NA nref=10,10,4 std=3 swa=NA ndec=1 dz.max=6 dz.min=-6 wd=0,100,500 snht1=30 snht2=30 tol=0.02 mxdif=0.05 force=FALSE wz=0.001 trf=0 mndat=NA gp=3 ini=NA na.strings=NA maxite=50 vmin=NA vmax=NA nclust=100 clustmethod=ward.D2 grdcol=#808080 mapcol=#A6A6A6 hires=FALSE expl=FALSE metad=FALSE sufbrk=m verb=TRUE
 
@@ -17,17 +17,6 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 
 Performing shift analysis on the 4 stations...
 
-poznan(1) breaks at 1878-03-01 (30.1)
-
-Update number of series:  4 + 1 = 5 
-
-Computation of missing data with outlier removal
-(Suggested data replacements are provisional)
-Station(rank) Date: Observed -> Suggested (Standard dev.)
-(No detected outliers)
-
-Performing shift analysis on the 5 stations...
-
 
 ========== STAGE 2 (SNHT on the whole series) =======================
 
@@ -38,9 +27,20 @@ Computation of missing data with outlier removal
 Station(rank) Date: Observed -> Suggested (Standard dev.)
 (No detected outliers)
 
+Performing shift analysis on the 4 stations...
+
+poznan(1) breaks at 1990-06-01 (104.5)
+
+Update number of series:  4 + 1 = 5 
+
+Computation of missing data with outlier removal
+(Suggested data replacements are provisional)
+Station(rank) Date: Observed -> Suggested (Standard dev.)
+(No detected outliers)
+
 Performing shift analysis on the 5 stations...
 
-praga(3) breaks at 1969-01-01 (103.0)
+praga(3) breaks at 1945-02-01 (62.3)
 
 Update number of series:  5 + 1 = 6 
 
@@ -50,17 +50,6 @@ Station(rank) Date: Observed -> Suggested (Standard dev.)
 (No detected outliers)
 
 Performing shift analysis on the 6 stations...
-
-poznan-2(5) breaks at 1990-06-01 (57.8)
-
-Update number of series:  6 + 1 = 7 
-
-Computation of missing data with outlier removal
-(Suggested data replacements are provisional)
-Station(rank) Date: Observed -> Suggested (Standard dev.)
-(No detected outliers)
-
-Performing shift analysis on the 7 stations...
 
 
 ========== STAGE 3 (Final computation of all missing data) ==========
@@ -72,38 +61,37 @@ Computation of missing data with outlier removal
 
 The following lines will have one of these formats:
 Station(rank) Date: Observed -> Suggested (Standard dev.)
-Iteration Max.mean.difference (Station_code)2 0.039 (poznan-2)
+Iteration Max.mean.difference (Station_code)2 0.037 (praga)
 
 Last series readjustment (please, be patient...)
 
-======== End of the homogenization process, after 10.83 secs 
+======== End of the homogenization process, after 7.76 secs 
 
 ----------- Final computations:
 
 ACmx: Station maximum absolute autocorrelations of anomalies
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.1800  0.2450  0.3000  0.3143  0.3600  0.5100 
+ 0.2100  0.2525  0.3050  0.3300  0.3875  0.5100 
 
 SNHT: Standard normal homogeneity test (on anomaly series)
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   4.40   10.35   12.10   13.19   16.50   22.10 
+  4.200   7.275  13.300  13.333  20.225  21.400 
 
 RMSE: Root mean squared error of the estimated data
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.4718  0.5153  0.7688  0.7376  0.9435  1.0052 
+ 0.4813  0.5631  0.8604  0.7871  0.9930  1.0190 
 
 POD: Percentage of original data
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  15.00   22.00   66.00   54.43   78.00  100.00 
+  15.00   45.00   64.50   61.67   81.75  100.00 
 
   ACmx SNHT RMSE POD Code     Name    
-1 0.25 22.1 0.55  17 poznan   poznan  
-2 0.41 16.1 0.77 100 warszawa warszawa
-3 0.24 12.1 0.98  71 praga    praga   
-4 0.51 16.9 1.01  85 gdansk   gdansk  
-5 0.30 11.4 0.47  66 poznan-2 poznan-2
-6 0.18  9.3 0.91  27 praga-2  praga-2 
-7 0.31  4.4 0.48  15 poznan-3 poznan-3
+1 0.29 20.8 0.48  72 poznan   poznan  
+2 0.41 18.5 0.80 100 warszawa warszawa
+3 0.24  7.0 1.02  57 praga    praga   
+4 0.51 21.4 1.02  85 gdansk   gdansk  
+5 0.32  4.2 0.49  15 poznan-2 poznan-2
+6 0.21  8.1 0.92  41 praga-2  praga-2 
 
 ----------- Generated output files: -------------------------
 

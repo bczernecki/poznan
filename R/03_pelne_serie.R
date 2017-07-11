@@ -137,6 +137,10 @@ homo2 <- bb %>% select(data,yy,mm,v2,warszawa,praga,gdansk) %>% rename(.,poznan=
 WriteXLS::WriteXLS(homo2, ExcelFileName = "data/xls/poznan_zrekonstruowany.xls") # to jest seria rekonstruowana doklejona do oryginalnego "dane_z_imgw"
 head(homo2)
 
+# wiemy, ze rekonstrukcja sprzed 1867 nie zadzialala, wiec zobaczmy na ile test sam "doszyje" wartosci
+
+homo2[which(homo2$data<=as.Date("1867-09-01")),"poznan"] <- NA
+
 
 # przeksztalcenie analogiczne jak dla dema:
 dat2 <- as.matrix(homo2[,-1:-3]) 
@@ -152,32 +156,31 @@ library(mapdata);library(maptools)
 homogen('Ttest3',1848,2016, hires=F, wd=c(0,100,500), dz.max=6, snht1=30)
 load("Ttest3_1848-2016.rda")
 
-# poznan zostal poszatkowany na 3 serie, zatem:
+# poznan zostal poszatkowany na 2 serie, zatem:
 a1 <- dah[,,1]
 a2 <- dah[,,5]
-a3 <- dah[,,7]
 
 b1 <- NULL
 b2 <- NULL
-b3 <- NULL
 
 for( i in 1:ncol(a1)) {
   b1 <- c(b1, a1[,i])
   b2 <- c(b2, a2[,i])
-  b3 <- c(b3, a3[,i])
 }
 
-bb <- cbind.data.frame(b1,b2,b3) 
+bb <- cbind.data.frame(b1,b2) 
 bb <- cbind.data.frame(bb,dane %>% dplyr::select(yy,mm,poznan,warszawa,praga,gdansk) %>% dplyr::select(poznan,warszawa,praga,gdansk)) 
 bb$yy <- dane$yy
 bb$mm <- dane$mm
 bb2 <- bb %>% group_by(yy) %>% summarise_all(mean)
-head(bb2)
+head(bb)
+bb <- select(bb,-b1)
+
+WriteXLS::WriteXLS(bb,ExcelFileName = "data/xls/poznan_do_1867.xls")
 
 plot(bb2$yy, bb2$poznan-colMeans(bb2,na.rm=T)["poznan"], type='l', lwd=2,, xlim=c(1850,2015), xaxs='i')
 lines(bb2$yy, bb2$b1 - colMeans(bb2,na.rm=T)["poznan"], type='l', col="red", lty=2)
-lines(bb2$yy, bb2$b3- colMeans(bb2,na.rm=T)["poznan"], type='l', col="green", lty=2)
-lines(bb2$yy, bb2$b2- colMeans(bb2,na.rm=T)["poznan"], type='l', col="blue", lty=1)
+lines(bb2$yy, bb2$b2, type='l', col="green", lty=2)
 # moze dorzucmy do wykresu jeszcze warszawe:
 lines(bb2$yy, bb2$warszawa-colMeans(bb2,na.rm=T)["warszawa"],  col="purple", lty=1, lwd=1)
 lines(bb2$yy, bb2$praga-colMeans(bb2,na.rm=T)["praga"],  col="orange", lty=1)
