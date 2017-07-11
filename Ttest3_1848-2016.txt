@@ -1,0 +1,119 @@
+
+HOMOGEN() APPLICATION OUTPUT  (From R's contributed package 'climatol' 3.0)
+
+=========== Homogenization of Ttest3, 1848-2016. (Tue Jul 11 23:42:43 2017)
+
+Parameters: varcli=Ttest3 anyi=1848 anyf=2016 suf=NA nm=NA nref=10,10,4 std=3 swa=NA ndec=1 dz.max=6 dz.min=-6 wd=0,100,500 snht1=30 snht2=30 tol=0.02 mxdif=0.05 force=FALSE wz=0.001 trf=0 mndat=NA gp=3 ini=NA na.strings=NA maxite=50 vmin=NA vmax=NA nclust=100 clustmethod=ward.D2 grdcol=#808080 mapcol=#A6A6A6 hires=FALSE expl=FALSE metad=FALSE sufbrk=m verb=TRUE
+
+Computing inter-station distances:  1  2  3
+
+
+========== STAGE 1 (SNHT on overlapping temporal windows) ===========
+
+Computation of missing data with outlier removal
+(Suggested data replacements are provisional)
+Station(rank) Date: Observed -> Suggested (Standard dev.)
+(No detected outliers)
+
+Performing shift analysis on the 4 stations...
+
+poznan(1) breaks at 1878-03-01 (30.1)
+
+Update number of series:  4 + 1 = 5 
+
+Computation of missing data with outlier removal
+(Suggested data replacements are provisional)
+Station(rank) Date: Observed -> Suggested (Standard dev.)
+(No detected outliers)
+
+Performing shift analysis on the 5 stations...
+
+
+========== STAGE 2 (SNHT on the whole series) =======================
+
+Computing inter-station weights... (done)
+
+Computation of missing data with outlier removal
+(Suggested data replacements are provisional)
+Station(rank) Date: Observed -> Suggested (Standard dev.)
+(No detected outliers)
+
+Performing shift analysis on the 5 stations...
+
+praga(3) breaks at 1969-01-01 (103.0)
+
+Update number of series:  5 + 1 = 6 
+
+Computation of missing data with outlier removal
+(Suggested data replacements are provisional)
+Station(rank) Date: Observed -> Suggested (Standard dev.)
+(No detected outliers)
+
+Performing shift analysis on the 6 stations...
+
+poznan-2(5) breaks at 1990-06-01 (57.8)
+
+Update number of series:  6 + 1 = 7 
+
+Computation of missing data with outlier removal
+(Suggested data replacements are provisional)
+Station(rank) Date: Observed -> Suggested (Standard dev.)
+(No detected outliers)
+
+Performing shift analysis on the 7 stations...
+
+
+========== STAGE 3 (Final computation of all missing data) ==========
+
+Computing inter-station weights... (done)
+
+Computation of missing data with outlier removal
+(Suggested data replacements are provisional)
+
+The following lines will have one of these formats:
+Station(rank) Date: Observed -> Suggested (Standard dev.)
+Iteration Max.mean.difference (Station_code)2 0.039 (poznan-2)
+
+Last series readjustment (please, be patient...)
+
+======== End of the homogenization process, after 10.83 secs 
+
+----------- Final computations:
+
+ACmx: Station maximum absolute autocorrelations of anomalies
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.1800  0.2450  0.3000  0.3143  0.3600  0.5100 
+
+SNHT: Standard normal homogeneity test (on anomaly series)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   4.40   10.35   12.10   13.19   16.50   22.10 
+
+RMSE: Root mean squared error of the estimated data
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.4718  0.5153  0.7688  0.7376  0.9435  1.0052 
+
+POD: Percentage of original data
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  15.00   22.00   66.00   54.43   78.00  100.00 
+
+  ACmx SNHT RMSE POD Code     Name    
+1 0.25 22.1 0.55  17 poznan   poznan  
+2 0.41 16.1 0.77 100 warszawa warszawa
+3 0.24 12.1 0.98  71 praga    praga   
+4 0.51 16.9 1.01  85 gdansk   gdansk  
+5 0.30 11.4 0.47  66 poznan-2 poznan-2
+6 0.18  9.3 0.91  27 praga-2  praga-2 
+7 0.31  4.4 0.48  15 poznan-3 poznan-3
+
+----------- Generated output files: -------------------------
+
+Ttest3_1848-2016.txt :  This text output 
+Ttest3_1848-2016_out.csv :  List of corrected outliers 
+Ttest3_1848-2016_brk.csv :  List of corrected breaks 
+Ttest3_1848-2016.pdf :  Diagnostic graphics 
+Ttest3_1848-2016.rda :  Homogenization results. Postprocess with (examples):
+   dahstat('Ttest3',1848,2016) #get averages in file Ttest3_1848-2016-me.csv 
+   dahstat('Ttest3',1848,2016,stat='tnd') #get OLS trends and their p-values 
+   dahgrid('Ttest3',1848,2016,grid=YOURGRID) #get homogenized grids 
+   ... (See other options in the package documentation)
+

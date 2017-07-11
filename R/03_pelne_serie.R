@@ -10,7 +10,7 @@ dane <- dane %>% dplyr::select(-matches("noaa"))
 
 
 
-roczne <-dane %>% group_by(yy) %>% summarise(poznan=mean(poznan), poczdam=mean(poczdam), warszawa=mean(warszawa), praga=mean(praga), wroclaw=mean(wroclaw),
+roczne <-dane %>% group_by(yy) %>% summarise(poznan=mean(poznan), poznan_rekonstr=mean(poznan_rekonstr), poczdam=mean(poczdam), warszawa=mean(warszawa), praga=mean(praga), wroclaw=mean(wroclaw),
                                              krakow=mean(krakow), szczecin=mean(szczecin),gdansk=mean(gdansk),sniezka=mean(sniezka))
 head(roczne)
 # plot(roczne$yy, roczne$poz-roczne$warszawa, type='l')
@@ -96,30 +96,109 @@ for( i in 1:ncol(a1)) {
   b2 <- c(b2, a2[,i])
   b3 <- c(b3, a3[,i])
 }
-bb <- cbind.data.frame(b1,b2,b3, dane %>% dplyr::select(yy,mm,poznan) %>% dplyr::select(poznan) %>% pull()) 
+
+bb <- cbind.data.frame(b1,b2,b3) 
+bb <- cbind.data.frame(bb,dane %>% dplyr::select(yy,mm,poznan,warszawa,praga,gdansk) %>% dplyr::select(poznan,warszawa,praga,gdansk)) 
 bb$yy <- dane$yy
 bb$mm <- dane$mm
 
 ## rysowanki anomalii:
-colnames(bb) <- c("v1","v2","v3","oryg","yy","mm")
+colnames(bb) <- c("v1","v2","v3","oryg","warszawa","praga","gdansk","yy","mm")
 head(bb)
 bb2 <- bb %>% group_by(yy) %>% summarise_all(mean)
+bb2 <- as.data.frame(apply(bb2,2,function(x) ma(x, 5)))
+
 # wychodzi, ze V2 to nasza seria najbardziej optymalna
 head(bb2)
 
-roczne3 <- apply(bb2,2,function(x) ma(x, 7))
-bb2 <- as.data.frame(roczne3)
-head(srednia_ruchoma)
+plot(bb2$yy, bb2$v2-colMeans(bb2,na.rm=T)["oryg"], type='l', lwd=2, ylim=c(-2,2), xlim=c(1850,2015), xaxs='i')
+lines(bb2$yy, bb2$oryg-colMeans(bb2,na.rm=T)["oryg"], type='l', col="blue", lty=1)
+#lines(bb2$yy, bb2$v1-colMeans(bb2,na.rm=T)["oryg"], type='l', col="red", lty=2)
+#lines(bb2$yy, bb2$v3-colMeans(bb2,na.rm=T)["oryg"], type='l', col="green", lty=2)
 
- 
-plot(bb2$yy, bb2$v2-colMeans(bb2,na.rm=T)[6], type='l', lwd=2, ylim=c(-1,3), xlim=c(1850,2015), xaxs='i')
-lines(bb2$yy, bb2$v1-colMeans(bb2,na.rm=T)[6], type='l', col="red", lty=2)
-lines(bb2$yy, bb2$v3-colMeans(bb2,na.rm=T)[6], type='l', col="green", lty=2)
-lines(bb2$yy, bb2$oryg-colMeans(bb2,na.rm=T)[6], type='l', col="blue", lty=1)
-
+# moze dorzucmy do wykresu jeszcze warszawe:
+lines(bb2$yy, bb2$warszawa-colMeans(bb2,na.rm=T)["warszawa"],  col="purple", lty=1)
+lines(bb2$yy, bb2$praga-colMeans(bb2,na.rm=T)["praga"],  col="orange", lty=1)
+lines(bb2$yy, bb2$gdansk-colMeans(bb2,na.rm=T)["gdansk"], type='l', col="green", lty=2)
+abline(v=1867, lty=2)
 # wnioski: do roku 1867 mozna przyjac wersje v2, tj. skorygowana o skok z 1920,
 # dla wczesniejszego okresu konieczne bedzie wyprowadzenie kolejnej poprawki bazujac na innych
 # seriach z tego okresu, ktore rowniez posiadaja dane (warszawa, praga, gdansk)
+
+head(bb)
+bb$data <- as.Date(paste(bb$yy,bb$mm,"01",sep="-"))
+#########################################
+#########################################
+## chyba najlepiej bedzie znowu zapuscic homogenizacje, ale juz na poprawionych danych do 1867:
+## a wczesniejszy okres uzupelnic seria surowa:
+bb[which(bb$data<=as.Date("1867-09-01")),"v2"] <- bb[which(bb$data<=as.Date("1867-09-01")),"oryg"]
+
+homo2 <- bb %>% select(data,yy,mm,v2,warszawa,praga,gdansk) %>% rename(.,poznan=v2)
+WriteXLS::WriteXLS(homo2, ExcelFileName = "data/xls/poznan_zrekonstruowany.xls") # to jest seria rekonstruowana doklejona do oryginalnego "dane_z_imgw"
+head(homo2)
+
+
+# przeksztalcenie analogiczne jak dla dema:
+dat2 <- as.matrix(homo2[,-1:-3]) 
+write(dat2,'Ttest3_1848-2016.dat')
+est.c2 <- data.frame(X=c(16.92,13.06,21.01,14.42, 15.74, 18.61),
+                     Y=c(52.406, 52.39, 52.23, 50.09, 50.736, 54.375),
+                     Z=c(86, 81, 106, 237, 1602, 10) ,
+                     Code=as.factor(c("poznan","poczdam", "warszawa", "praga", "sniezka", "gdansk")),
+                     Names=c("poznan","poczdam", "warszawa", "praga", "sniezka", "gdansk"))   
+est.c2 <- est.c2 %>% filter(Names %in% c("poznan","warszawa","praga","gdansk"))
+write.table(est.c2,'Ttest3_1848-2016.est',row.names=FALSE,col.names=FALSE)
+library(mapdata);library(maptools)
+homogen('Ttest3',1848,2016, hires=F, wd=c(0,100,500), dz.max=6, snht1=30)
+load("Ttest3_1848-2016.rda")
+
+# poznan zostal poszatkowany na 3 serie, zatem:
+a1 <- dah[,,1]
+a2 <- dah[,,5]
+a3 <- dah[,,7]
+
+b1 <- NULL
+b2 <- NULL
+b3 <- NULL
+
+for( i in 1:ncol(a1)) {
+  b1 <- c(b1, a1[,i])
+  b2 <- c(b2, a2[,i])
+  b3 <- c(b3, a3[,i])
+}
+
+bb <- cbind.data.frame(b1,b2,b3) 
+bb <- cbind.data.frame(bb,dane %>% dplyr::select(yy,mm,poznan,warszawa,praga,gdansk) %>% dplyr::select(poznan,warszawa,praga,gdansk)) 
+bb$yy <- dane$yy
+bb$mm <- dane$mm
+bb2 <- bb %>% group_by(yy) %>% summarise_all(mean)
+head(bb2)
+
+plot(bb2$yy, bb2$poznan-colMeans(bb2,na.rm=T)["poznan"], type='l', lwd=2,, xlim=c(1850,2015), xaxs='i')
+lines(bb2$yy, bb2$b1 - colMeans(bb2,na.rm=T)["poznan"], type='l', col="red", lty=2)
+lines(bb2$yy, bb2$b3- colMeans(bb2,na.rm=T)["poznan"], type='l', col="green", lty=2)
+lines(bb2$yy, bb2$b2- colMeans(bb2,na.rm=T)["poznan"], type='l', col="blue", lty=1)
+# moze dorzucmy do wykresu jeszcze warszawe:
+lines(bb2$yy, bb2$warszawa-colMeans(bb2,na.rm=T)["warszawa"],  col="purple", lty=1, lwd=1)
+lines(bb2$yy, bb2$praga-colMeans(bb2,na.rm=T)["praga"],  col="orange", lty=1)
+lines(bb2$yy, bb2$gdansk-colMeans(bb2,na.rm=T)["gdansk"], type='l', col="green", lty=2)
+abline(v=1867)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##################################
 ## TODO: 11/07/2017
@@ -127,13 +206,16 @@ lines(bb2$yy, bb2$oryg-colMeans(bb2,na.rm=T)[6], type='l', col="blue", lty=1)
 ## A NIE REKONSTRUOWANA!!!!
 
 # zalozmy, ze seria 1867-1892 jest homogeniczna (ul. zielona 1 i zielona 2)
-# sprobujmy wykorzystac metode stalosci roznic dla tych 3 stacji:
+# sprobujmy wykorzystac metode stalosci roznic dla tych 3 stacji w celu obliczenia roznicy miedzy
+# seiar rekonstruowana i warszawa i seria smosarskiego w tym okresie
 roczne$recon <- bb2$v2
 roczne %>% filter(yy>=1867 & yy<=1892) %>% select(yy:poznan,warszawa,praga,gdansk,recon) %>% colMeans() %>% round(.,1)
 # yy        poznan warszawa    praga   gdansk    recon 
 # 1879.5      8.1      7.4      9.0      7.3      7.7 
 
+
 # przed przeniesieniem stacji z grobli na zielona 1 roznice te wygladaly tak:
+# tutaj problemem jest seria rekonstruowana
 roczne %>% filter(yy>=1862 & yy<=1867) %>% select(yy:poznan,warszawa,praga,gdansk,recon) %>% colMeans() %>% round(.,1)
 #     yy   poznan warszawa    praga   gdansk    recon 
 # 1864.5      8.1      7.3      9.3      7.3      8.7 
