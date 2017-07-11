@@ -124,9 +124,9 @@ calosc <- left_join(calosc, krakow)
 #calosc <- readRDS("data/calosc.rds")
 
 # dodanie serii ze szczecina:
-szczecin <- read.table("data/xls/szczecin.txt", header=F, na.strings = -999)
+szczecin <- read.table("data/xls/szczecin_dabie.txt", header=F, na.strings = c("-99.0","505"))
+szczecin <- szczecin[,1:13]
 colnames(szczecin) <- c("yy", 1:12)
-szczecin[,-1] <- szczecin[,-1]/10
 szczecin <- gather(szczecin, key="mm", value="szczecin", 2:13)
 head(szczecin)
 szczecin$mm <- as.numeric(as.character(szczecin$mm))
@@ -148,6 +148,17 @@ calosc <- left_join(calosc, sniezka)
 calosc <- select(calosc, yy:wroclaw,krakow:sniezka,noaa_poczdam:noaa_warszawa)
 saveRDS(calosc, "data/calosc.rds")
 
+# dolaczenie gdanska-wrzeszcza. Rekonstrukcja: Mietus 1998, Wiad. IMGW
+gdansk <- read_xlsx("data/xls/gdansk_mietus.xlsx")
+gdansk <- gdansk[,-14]
+head(gdansk)
+colnames(gdansk) <- c("yy", 1:12)
+gdansk <- gather(gdansk, key="mm", value="gdansk", 2:13)
+gdansk$yy <- as.numeric(as.character(gdansk$yy))
+gdansk$mm <- as.numeric(as.character(gdansk$mm))
+calosc <- left_join(calosc, gdansk)
+saveRDS(calosc, "data/calosc.rds")
+
 calosc <- readRDS("data/calosc.rds")
 ########################
 ########################
@@ -156,7 +167,7 @@ calosc <- readRDS("data/calosc.rds")
 ########################
 
 roczne <-calosc %>% group_by(yy) %>% summarise(poznan=mean(poznan), poczdam=mean(poczdam), warszawa=mean(warszawa), praga=mean(praga), wroclaw=mean(wroclaw),
-                                               krakow=mean(krakow), szczecin=mean(szczecin),sniezka=mean(sniezka),
+                                               krakow=mean(krakow), szczecin=mean(szczecin),gdansk=mean(gdansk), sniezka=mean(sniezka),
                                                noaa_poznan=mean(noaa_poznan), noaa_poczdam=mean(noaa_poczdam), noaa_warszawa=mean(noaa_warszawa)
                                                )
  head(roczne)
@@ -175,22 +186,23 @@ ma <- function(arr, n=15){
 # srednia ruchoma 5-letnia
 roczne3 <- apply(roczne,2,function(x) ma(x, 5))
 srednia_ruchoma <- as.data.frame(roczne3)
-srednia_ruchoma <- srednia_ruchoma[,c(1:9)]
+srednia_ruchoma <- srednia_ruchoma[,c(1:10)]
 
 head(srednia_ruchoma)
 srednia_ruchoma <- gather(as.data.frame(srednia_ruchoma), key = "stacja",value = "t2m",poznan:sniezka)
 # tylko na cele korekty jesli chcemy cos dodac/odjac:
 # srednia_ruchoma[which(srednia_ruchoma$stacja=="poznan" & srednia_ruchoma$yy<1920),3] <-  srednia_ruchoma[which(srednia_ruchoma$stacja=="poznan" & srednia_ruchoma$yy<1920),3]
-
+head(srednia_ruchoma)
 #podciagamy sniezke, zeby nie liczyc na razie anomalii dla kazdej stacji:
 srednia_ruchoma[which(srednia_ruchoma$stacja=="sniezka"),3] <-  srednia_ruchoma[which(srednia_ruchoma$stacja=="sniezka"),3]+7.5
 #
 
-srednia_ruchoma <- dplyr::filter(srednia_ruchoma, yy>1852, yy<2000)
+
+#srednia_ruchoma <- dplyr::filter(srednia_ruchoma, yy>1852)
 head(srednia_ruchoma)
-srednia_ruchoma <- filter(srednia_ruchoma, stacja!="szczecin")
-ggplot(srednia_ruchoma, aes(yy,t2m, group=stacja, colour=stacja))+geom_line()+ggtitle("Comparison")+
-  geom_smooth(method="loess")#+  scale_colour_manual(values=c("pink","skyblue","red"))
+srednia_ruchoma <- filter(srednia_ruchoma, stacja!="szczecin", stacja!="wroclaw", stacja!="krakow")
+ggplot(srednia_ruchoma, aes(yy,t2m, group=stacja, colour=stacja))+geom_line()+ggtitle("Comparison")
+  #geom_smooth(method="loess")#+  scale_colour_manual(values=c("pink","skyblue","red"))
 
 
 
