@@ -119,8 +119,84 @@ lines(bb2$yy, bb2$oryg-colMeans(bb2,na.rm=T)[6], type='l', col="blue", lty=1)
 
 # wnioski: do roku 1867 mozna przyjac wersje v2, tj. skorygowana o skok z 1920,
 # dla wczesniejszego okresu konieczne bedzie wyprowadzenie kolejnej poprawki bazujac na innych
-# seriach z tego okresu, ktore rowniez posiadaja dane (warszawa, praga)
+# seriach z tego okresu, ktore rowniez posiadaja dane (warszawa, praga, gdansk)
 
+##################################
+## TODO: 11/07/2017
+## UWAGA UWAGA!! LEPIEJ BEDZIE WYKORZYSTAC DO OSTATNICH ZROWNAN ORYGINALNA SERIE!!!
+## A NIE REKONSTRUOWANA!!!!
+
+# zalozmy, ze seria 1867-1892 jest homogeniczna (ul. zielona 1 i zielona 2)
+# sprobujmy wykorzystac metode stalosci roznic dla tych 3 stacji:
+roczne$recon <- bb2$v2
+roczne %>% filter(yy>=1867 & yy<=1892) %>% select(yy:poznan,warszawa,praga,gdansk,recon) %>% colMeans() %>% round(.,1)
+# yy        poznan warszawa    praga   gdansk    recon 
+# 1879.5      8.1      7.4      9.0      7.3      7.7 
+
+# przed przeniesieniem stacji z grobli na zielona 1 roznice te wygladaly tak:
+roczne %>% filter(yy>=1862 & yy<=1867) %>% select(yy:poznan,warszawa,praga,gdansk,recon) %>% colMeans() %>% round(.,1)
+#     yy   poznan warszawa    praga   gdansk    recon 
+# 1864.5      8.1      7.3      9.3      7.3      8.7 
+
+# a jeszcze przed przeniesiem stacji z pocztowej na groble tak:
+roczne %>% filter(yy<=1861) %>% select(yy:poznan,warszawa,praga,gdansk,recon) %>% colMeans(na.rm = T) %>% round(.,1)
+#     yy   poznan warszawa    praga   gdansk    recon 
+# 1855.0      7.7      7.3      8.7      7.5      8.5 
+
+recon <- select(bb,yy,mm,v2,oryg)
+recon$data <- as.Date(paste(recon$yy,recon$mm,"01",sep="-"))
+
+# przyjmujac metode stalosci roznic:
+# dla serii rekonstruowanej trzeba wprowadzic dodatkowa poprawke 1862-1867 rzedu 1,1*C wzgledem wawy, 1,0* wzgledem gdanska i 0,7 wzgledem pragi
+# dla serii rekonstruowanej dodatkowa poprawka <1862 rzedu 0,9*C wzgledem wawy, 0,6*C wzgledem gdanska i 1,1 wzgledem pragi
+# interpolujac na oko:
+
+#1862-67 -> odejmujemy 1,0*C
+recon[which(recon$data >=as.Date("1862-04-01") & recon$data<=as.Date("1867-09-01") ),"v2"] <- recon[which(recon$data >=as.Date("1862-04-01") & recon$data<=as.Date("1867-09-01") ),"v2"]-1
+#1848-62 -> odejmujemy 0,9*C
+recon[which(recon$data<=as.Date("1862-03-01") ),"v2"] <- recon[which(recon$data<=as.Date("1862-03-01")) ,"v2"]-0.9
+
+### w tym momencie rekonstrukcja powinna byc gites!!!
+recon <- select(recon, data,yy,mm,v2,oryg) 
+colnames(recon)[4] <- "rekonstrukcja"
+
+head(recon)
+WriteXLS::WriteXLS(recon, ExcelFileName = "data/xls/poznan_zrekonstruowany.xls")
+
+roczne <- left_join(dane, recon)
+roczne <- roczne %>% select(yy, poznan:praga,gdansk, sniezka, rekonstrukcja) %>% group_by(yy) %>% 
+  summarise(poznan=mean(poznan), poczdam=mean(poczdam), warszawa=mean(warszawa), praga=mean(praga), 
+            gdansk=mean(gdansk),sniezka=mean(sniezka), rekonstrukcja=mean(rekonstrukcja))
+
+roczne3 <- apply(roczne,2,function(x) ma(x, 7))
+srednia_ruchoma <- as.data.frame(roczne3)
+srednia_ruchoma <- gather(as.data.frame(srednia_ruchoma), key = "stacja",value = "t2m",poznan:rekonstrukcja)
+srednia_ruchoma[which(srednia_ruchoma$stacja=="sniezka"),3] <-  srednia_ruchoma[which(srednia_ruchoma$stacja=="sniezka"),3]+6.5
+ggplot(srednia_ruchoma, aes(yy,t2m, group=stacja, colour=stacja))+geom_line()+ggtitle("Comparison")+
+  scale_x_continuous(breaks = seq(1850, 2015, by = 10)) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+plot(bb2$yy, bb2$v2, xlim=c(1848,1875), type='l', ylim=c(5,12))
+lines(roczne$yy, roczne$warszawa, xlim=c(1848,1875), lty=2)
+lines(roczne$yy, roczne$praga, xlim=c(1848,1875), lty=3)
+lines(roczne$yy, roczne$gdansk, lty=3)
 
 
 abline(v=seq(1850,2050,10), lty=3)
