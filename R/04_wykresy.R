@@ -25,6 +25,7 @@ ma <- function(arr, n=15){
 }
 
 library(zoo)
+library(smooth)
 rollmean(anomalie[,3], k=5, align = "center")
 a <- sma(anomalie[,3], order = 5, intervals = 'none')
 
