@@ -50,6 +50,14 @@ box()
 dev.off()
 
 
+# mozna porownywac opcjonalnie inne lokalizacje:
+plot(1848:2016,ma_anomalie[,"poznan_rekonstr"], type='l', ylim=c(-2,2), xaxs="i", xlim=c(1848,2016), ylab="Temperature anomalies [C]", xlab='', xaxt='n')
+axis(1, at = seq(1850,2020, by=20), labels= seq(1850,2020, by=20))
+lines(1848:2016,ma_anomalie[,"poczdam"], type='l', col='blue')
+lines(1848:2016,ma_anomalie[,"wroclaw"], type='l', col='red')
+lines(1848:2016,ma_anomalie[,"praga"], type='l', col='brown')
+
+
 dane2$rekon_anomalie <- dane2$poznan_rekonstr-dane2$srednie # anomalie
 dane2$rekon_anomalie_sd <- dane2$rekon_anomalie/dane2$odchylenie # odchylenie zestandaryzowane
 
