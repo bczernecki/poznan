@@ -29,12 +29,13 @@ library(smooth)
 rollmean(anomalie[,3], k=5, align = "center")
 a <- sma(anomalie[,3], order = 5, intervals = 'none')
 
-ma_anomalie <- apply(anomalie,2,function(x) ma(x, 7))
-ma_anomalie <- apply(anomalie,2,function(x) as.numeric(sma(x, order = 5, intervals = 'none')$fitted))
+ma_anomalie <- apply(anomalie,2,function(x) ma(x, 3))
+#ma_anomalie <- apply(anomalie,2,function(x) as.numeric(sma(x, order = 5, intervals = 'none')$fitted))
 svg("figs/corrected_series_v2.svg", height=6.5, width =11 )
 plot(1848:2016,ma_anomalie[,3], type='l', ylim=c(-2,2), xaxs="i", xlim=c(1848,2016), ylab="Temperature anomalies [C]", xlab='', xaxt='n')
 axis(1, at = seq(1850,2020, by=20), labels= seq(1850,2020, by=20))
 lines(1848:2016,ma_anomalie[,4], type='l', col='blue')
+#lines(1848:2016,ma_anomalie[,8], type='l', col='red') # opcjonalne dodanie serii Brysiów z Wrocławia
 brejki <- c(1847,1862,1867,1885,1892,1911,1919, 1920,2020)
 abline(v= brejki, lty=2)
 kolory <- sample(gray.colors(8))
@@ -47,6 +48,14 @@ text((brejki[8]+brejki[9])/2,1.6,srt=0, adresy[8])
 legend(y=-1.4, x=1965, legend=c("raw data", "homogenized data"), lty=1, lwd=2, col=c("black","blue"), border=NA,  bty = "n" )
 box()
 dev.off()
+
+
+# mozna porownywac opcjonalnie inne lokalizacje:
+plot(1848:2016,ma_anomalie[,"poznan_rekonstr"], type='l', ylim=c(-2,2), xaxs="i", xlim=c(1848,2016), ylab="Temperature anomalies [C]", xlab='', xaxt='n')
+axis(1, at = seq(1850,2020, by=20), labels= seq(1850,2020, by=20))
+lines(1848:2016,ma_anomalie[,"poczdam"], type='l', col='blue')
+lines(1848:2016,ma_anomalie[,"wroclaw"], type='l', col='red')
+lines(1848:2016,ma_anomalie[,"praga"], type='l', col='brown')
 
 
 dane2$rekon_anomalie <- dane2$poznan_rekonstr-dane2$srednie # anomalie
