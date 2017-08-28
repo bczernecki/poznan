@@ -29,7 +29,7 @@ konwersja<-function (dane, loc = NA, param = NA, unit = NA, lon = NA, lat = NA,
   attr(y, "reference") <- NA
   attr(y, "info") <- NA
   attr(y, "method") <- NA
-  attr(y, "history") <- history.stamp(NULL)
+  #attr(y, "history") <- history.stamp(NULL)
   class(y) <- c("station", "month", "zoo")
   return(y)
 }

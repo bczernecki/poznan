@@ -37,8 +37,10 @@ breakpoints(bp.nile)
 
 
 fm0 <- lm(dane ~ 1)
-fm1 <- lm(dane ~ breakfactor(bp.nile, breaks = 5))
+fm1 <- lm(dane ~ breakfactor(bp.nile, breaks = 1))
 plot(dane)
+str(fm1)
+
 lines(ts(fitted(fm0), start = 1848), col = 3)
 lines(ts(fitted(fm1), start = 1848), col = 4)
 lines(bp.nile)
@@ -104,3 +106,4 @@ plot(ansmean,cpt.col='blue')
 
 dane2 <- as.data.frame(dane)
 CE.NB(dane2, Nmax = 10,      distyp = 2, penalty = "BIC", parallel = T)
+
