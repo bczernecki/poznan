@@ -136,7 +136,13 @@ ci.poznan <- confint(poznan)
 breakdates(ci.poznan)
 ci.poznan
 
-plot(dane, lwd=.3, ylab = expression("Temperature (" * degree * "C)"))
+plot(dane, lwd=.4, ylab = expression("Temperature (" * degree * "C)"),
+     axes=F,las=2)
+axis(side = 1,las=2, at = c(seq(1848, 2018, 10)))
+axis(side = 2, las=1, at = c(seq(5, 11, .5)))
+abline(h=c(seq(5, 11, .5)),v= c(seq(1848, 2018, 10)), lwd=.5, col="gray", lty=3)
+box()
+
 lines(ci.poznan)
 
 dane1 <- read_excel("data/xls/calosc_z_imgw.xls")
@@ -169,12 +175,12 @@ lines(ts(fitted(trend2), start = 1848), col = 2, lwd=1.5)
 lines(ts(fitted(trend3), start = 1902), col = 2, lwd=1.5)
 lines(ts(fitted(trend4), start = 1987), col = 2, lwd=1.5)
 
-text(1964, 10.4,  expression("" * beta * " = 0.010"), col="blue")
+text(1964, 10.4,  expression("" * beta * " = 0.011"), col="blue")
 text(1964, 10.1,  "p = 0.000", col="blue")
 text(1854, 10.4,  expression("" * beta * " = 0.007"), col="red")
-text(1854, 10.1,  "p = 0.247", col="red")
+text(1854, 10.1,  "p = 0.248", col="red")
 text(1914, 10.4,  expression("" * beta * " = 0.002"), col="red")
-text(1914, 10.1,  "p = 0.445", col="red")
+text(1914, 10.1,  "p = 0.446", col="red")
 text(1995, 10.4,  expression("" * beta * " = 0.045"), col="red")
 text(1995, 10.1,  "p = 0.009", col="red")
 
