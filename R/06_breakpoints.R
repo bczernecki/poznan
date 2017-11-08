@@ -136,7 +136,9 @@ ci.poznan <- confint(poznan)
 breakdates(ci.poznan)
 ci.poznan
 
-plot(dane, lwd=.4, ylab = expression("Temperature (" * degree * "C)"),
+  svg(filename = "figs/poznan_trends.svg", width = 11, height = 6)
+
+plot(dane, lwd=.4, ylab = expression("Temperature [" * degree * "C]"),
      axes=F,las=2)
 axis(side = 1,las=2, at = c(seq(1848, 2018, 10)))
 axis(side = 2, las=1, at = c(seq(5, 11, .5)))
@@ -184,4 +186,9 @@ text(1914, 10.1,  "p = 0.446", col="red")
 text(1995, 10.4,  expression("" * beta * " = 0.045"), col="red")
 text(1995, 10.1,  "p = 0.009", col="red")
 
+legend(y=6.5, x=1939, cex=.9,legend=c("raw data",'all data trend', "partially data trend"), 
+       lty=c(1,2,1), lwd=c(.3,1.4,1.4), col=c("black","blue","red"),
+       border="black",  bty = "n" )
+dev.off()
 #### koniec
+
